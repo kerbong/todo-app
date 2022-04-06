@@ -4,6 +4,7 @@ const greeting = document.querySelector("#greeting");
 const link = document.querySelector("a");
 const HIDDEN_CLASSNAME = "hidden";
 const USERNAME_KEY = "username";
+const deleteUserBtn = document.querySelector(".user-change");
 
 function onLoginSubmit(event) {
   event.preventDefault();
@@ -11,6 +12,8 @@ function onLoginSubmit(event) {
   const username = loginInput.value;
   localStorage.setItem(USERNAME_KEY, username);
   paintGreeting(username);
+  deleteUserBtn.style.visibility = "visible";
+  deleteUserBtn.addEventListener("click", onDeleteUser);
 }
 
 function paintGreeting(username) {
@@ -18,13 +21,23 @@ function paintGreeting(username) {
   greeting.classList.remove(HIDDEN_CLASSNAME);
 }
 
+function onDeleteUser() {
+  localStorage.clear();
+  //   window.reload();
+  location.replace(location.href);
+}
+
 const savedUserName = localStorage.getItem(USERNAME_KEY);
 
-if (savedUserName === null) {
-  //There is no username in localstorage, show the form
-  loginForm.classList.remove(HIDDEN_CLASSNAME);
-  loginForm.addEventListener("submit", onLoginSubmit);
-} else {
-  // show the greeting, not show form
-  paintGreeting(savedUserName);
+function init() {
+  if (savedUserName === null) {
+    //There is no username in localstorage, show the form
+    loginForm.classList.remove(HIDDEN_CLASSNAME);
+    loginForm.addEventListener("submit", onLoginSubmit);
+  } else {
+    // show the greeting, not show form
+    paintGreeting(savedUserName);
+  }
 }
+
+init();
